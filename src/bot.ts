@@ -2,7 +2,6 @@ import { Client, Message } from "discord.js"
 import { Player } from "discord-player"
 import { DisTube } from "distube"
 import config from "./config";
-import { createTicket } from "./firebase";
 
 const prefix = "*";
 let timer: NodeJS.Timeout
@@ -37,22 +36,22 @@ const distube = new DisTube(client, {
 distube.on("playSong", (queue, song) => {
     if(queue.textChannel)
     {
-        queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}`)
+        queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user?.username}`)
     }
 });
 
 distube.on("addSong", (queue, song) => {
     if(queue.textChannel)
     {
-        queue.textChannel.send(`Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue by ${song.user}.`)
+        queue.textChannel.send(`Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue by ${song.user?.username}.`)
     }
 });
 
 distube.on("searchNoResult", (message, query) => message.channel.send(`No result found for \`${query}\`!`));
 
 distube.on('error', (channel, e) => {
-    if (channel) channel.send(`An error encountered: ${e}`)
-    else console.error(e)
+    if (channel) channel.send(`${e}`)
+    console.error(e)
 })
 
 distube.on("empty", queue => {
@@ -112,9 +111,6 @@ client.on("messageCreate", async (message: Message) => {
             textChannel: message.channel,
         });
         if(timer) { clearTimeout(timer) }
-
-        // @ts-ignore
-        //await createTicket(message.id, message.toJSON())
     }
     else if(command == "skip" || command == "s")
     {

@@ -713,6 +713,11 @@
   "resolved" "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz"
   "version" "1.1.1"
 
+"avconv@^3.1.0":
+  "integrity" "sha512-oNae7Stw+LRikcpbh+IZoijrDu5kplFsUBdJkqJbtuhmfyHoLy+qWyFfi8rDwzRDzzkd1RY0KkjwpbX4KNv7Hg=="
+  "resolved" "https://registry.npmjs.org/avconv/-/avconv-3.1.0.tgz"
+  "version" "3.1.0"
+
 "balanced-match@^1.0.0", "balanced-match@^1.0.2":
   "integrity" "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
   "resolved" "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"

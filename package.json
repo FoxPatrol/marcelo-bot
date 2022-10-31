@@ -9,6 +9,7 @@
     "ansi-regex": "^5.0.1",
     "ansi-styles": "^4.3.0",
     "array-flatten": "^1.1.1",
+    "avconv": "^3.1.0",
     "balanced-match": "^1.0.2",
     "body-parser": "^1.20.1",
     "brace-expansion": "^1.1.11",
