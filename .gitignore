@@ -3,3 +3,5 @@ build
 assets
 urls.txt
 .env
+run.bat
+run.txt
