@@ -227,11 +227,11 @@ client.on("messageCreate", async (message: Message) => {
     {
         message.channel.send(
         "Use \`*\` to send me commands.\n" +
-        "\`*play [music-link]\` to play the music link" +
-        "\`*skip\` to skip the current music" +
-        "\`*queue\` to see the current music queue" +
-        "\`*clear\` or \`*stop\` to clear the music queue" +
-        "\`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list" +
+        "\`*play [music-link]\` to play the music link\n" +
+        "\`*skip\` to skip the current music\n" +
+        "\`*queue\` to see the current music queue\n" +
+        "\`*clear\` or \`*stop\` to clear the music queue\n" +
+        "\`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
         "\`*leave\` or \`disconnect\` to make me leave"
         );
     }
