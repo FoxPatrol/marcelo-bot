@@ -81,10 +81,10 @@
     "tslib" "^2.4.0"
     "ws" "^8.8.1"
 
-"@distube/ytdl-core@^4.11.3":
-  "integrity" "sha512-zmsR2khWOzdnYm7FoDlaYDevcFM6Mt1Y+V/zDmCYsFUcQJw+9NZ+tKH4sKsNuI/lJrSoTGT5VMso+aftXCqj6A=="
-  "resolved" "https://registry.npmjs.org/@distube/ytdl-core/-/ytdl-core-4.11.5.tgz"
-  "version" "4.11.5"
+"@distube/ytdl-core@^4.11.3", "@distube/ytdl-core@^4.11.7":
+  "integrity" "sha512-Bq4kxRAOZOFxgQ11g65tHp502yYMNEsFsO3VO7NqTfTLiQvKVLEqvenikm0873cPMgz+qXp0VJzpeLkmB4zEzg=="
+  "resolved" "https://registry.npmjs.org/@distube/ytdl-core/-/ytdl-core-4.11.7.tgz"
+  "version" "4.11.7"
   dependencies:
     "m3u8stream" "^0.8.6"
     "miniget" "^4.2.2"

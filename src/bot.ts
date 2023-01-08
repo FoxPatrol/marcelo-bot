@@ -61,7 +61,6 @@ distube.on("empty", queue => {
     }
 })
 
-// bugged, when finished the count bein
 distube.on("finish", queue => {
     const leaveTime = 60; // in seconds
 
@@ -95,16 +94,16 @@ client.on("messageCreate", async (message: Message) => {
     const command = args.shift()?.toLocaleLowerCase();
     //console.log(command, args)
 
-    if(!command) { message.channel.send(message.author.toString() + " unknown command!"); return}
-    if(!message.member || !message.member.voice.channel || !message.member.voice.channelId) { message.channel.send(message.author.toString() + " is not in a voice channel!"); return }
-    if(!message.guildId) { message.channel.send(message.author.toString() + " your message does not belong to this server (somehow?)!"); return }
+    if(!command) { message.channel.send(message.author.username + " unknown command!"); return}
+    if(!message.member || !message.member.voice.channel || !message.member.voice.channelId) { message.channel.send(message.author.username + " is not in a voice channel!"); return }
+    if(!message.guildId) { message.channel.send(message.author.username + " your message does not belong to this server (somehow?)!"); return }
     const botVoiceChannel = distube.voices.get(message.guildId);
-    if(botVoiceChannel && botVoiceChannel?.channelId && botVoiceChannel?.channelId?.toString() != message.member.voice.channelId.toString()) { message.channel.send(message.author.toString() + " is not in the same voice channel as me!"); return }
+    if(botVoiceChannel && botVoiceChannel?.channelId && botVoiceChannel?.channelId?.toString() != message.member.voice.channelId.toString()) { message.channel.send(message.author.username + " is not in the same voice channel as me!"); return }
 
     if(command == "play" || command == "p")
     {
         const playArgument = args.join(" ");
-        if(!playArgument) { message.channel.send(message.author.toString() + " no song selected!"); return }
+        if(!playArgument) { message.channel.send(message.author.username + " no song selected!"); return }
         distube.play(message.member?.voice.channel, playArgument, {
             member: message.member,
             // @ts-ignore
@@ -224,9 +223,21 @@ client.on("messageCreate", async (message: Message) => {
             queue.songs.splice(pos-1, 1)
         }
     }
+    else if(command == "help" || command == "h")
+    {
+        message.channel.send(`
+        Use \`*\` to send me commands.\n
+        \`*play [music-link]\` to play the music link
+        \`*skip\` to skip the current music
+        \`*queue\` to see the current music queue
+        \`*clear\` or \`*stop\` to clear the music queue
+        \`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list
+        \`*leave\` or \`disconnect\` to make me leave
+        `);
+    }
     else
     {
-        message.channel.send(message.author.toString() + " unknown command!");
+        message.channel.send(message.author.username + " unknown command!");
     }
 });
 // =================================== END =====================================
