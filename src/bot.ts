@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js"
+import { ActivityType, Client, Message } from "discord.js"
 import { Player } from "discord-player"
 import { DisTube } from "distube"
 import config from "./config";
@@ -80,6 +80,13 @@ distube.on("finish", queue => {
 // =============================================================================
 client.once("ready", () => {
     console.log("Marcelo bot is ready!");
+
+    if(client.user)
+    {
+        client.user.setActivity("*help", {
+            type: ActivityType.Listening,
+        });
+    }
 });
 
 client.on("messageCreate", async (message: Message) => {
@@ -102,7 +109,7 @@ client.on("messageCreate", async (message: Message) => {
 
     if(command == "play" || command == "p")
     {
-        const playArgument = args.join(" ");
+        const playArgument = args.join(" ");    // join all words into one argument, musics are often referred to with many words
         if(!playArgument) { message.channel.send(message.author.username + " no song selected!"); return }
         distube.play(message.member?.voice.channel, playArgument, {
             member: message.member,
@@ -230,8 +237,9 @@ client.on("messageCreate", async (message: Message) => {
         "\`*play [music-link]\` to play the music link\n" +
         "\`*skip\` to skip the current music\n" +
         "\`*queue\` to see the current music queue\n" +
+        "\`*seek [seconds]\` to jump to the time-argument in the music\n" +
         "\`*clear\` or \`*stop\` to clear the music queue\n" +
-        "\`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
+        "\`*remove [number]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
         "\`*leave\` or \`disconnect\` to make me leave"
         );
     }
