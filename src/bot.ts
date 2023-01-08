@@ -62,7 +62,7 @@ distube.on("empty", queue => {
 })
 
 distube.on("finish", queue => {
-    const leaveTime = 60; // in seconds
+    const leaveTime = 180; // in seconds
 
     timer = setTimeout(() => {
         if(queue.voiceChannel)
