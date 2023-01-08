@@ -225,15 +225,15 @@ client.on("messageCreate", async (message: Message) => {
     }
     else if(command == "help" || command == "h")
     {
-        message.channel.send(`
-        Use \`*\` to send me commands.\n
-        \`*play [music-link]\` to play the music link
-        \`*skip\` to skip the current music
-        \`*queue\` to see the current music queue
-        \`*clear\` or \`*stop\` to clear the music queue
-        \`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list
-        \`*leave\` or \`disconnect\` to make me leave
-        `);
+        message.channel.send(
+        "Use \`*\` to send me commands.\n" +
+        "\`*play [music-link]\` to play the music link" +
+        "\`*skip\` to skip the current music" +
+        "\`*queue\` to see the current music queue" +
+        "\`*clear\` or \`*stop\` to clear the music queue" +
+        "\`*remove [arg1]\` to remove a music from the queue, where the argument is the number of the music in the queue list" +
+        "\`*leave\` or \`disconnect\` to make me leave"
+        );
     }
     else
     {
