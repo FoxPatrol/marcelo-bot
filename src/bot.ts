@@ -203,7 +203,7 @@ client.on("messageCreate", async (message: Message) => {
             return;
         }
 
-        message.channel.send('Swapped positions:\n\`' + queue.songs[pos1-1].name + '\`\n\`' + queue.songs[pos2-1].name + '\`')
+        message.channel.send('Swapped positions: \`' + queue.songs[pos1-1].name + '\` <---> \`' + queue.songs[pos2-1].name + '\`')
         const song1 = queue.songs[pos1-1];
         const song2 = queue.songs[pos2-1];
 
@@ -258,7 +258,7 @@ client.on("messageCreate", async (message: Message) => {
         "\`*clear\` or \`*stop\` to clear the music queue\n" +
         "\`*remove [number]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
         "\`*move [number] [number]\` to swap the positions of the songs in queue\n" +
-        "\`*leave\` or \`disconnect\` to make me leave"
+        "\`*leave\` or \`*disconnect\` to make me leave"
         );
     }
     else
