@@ -30,7 +30,7 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "discord-api-types": "^0.37.15",
-    "discord-player": "^5.3.2",
+    "discord-player": "^6.1.1",
     "discord.js": "^14.6.0",
     "distube": "^4.0.4",
     "dotenv": "^16.0.3",

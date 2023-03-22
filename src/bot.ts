@@ -170,8 +170,9 @@ client.on("messageCreate", async (message: Message) => {
         distube.stop(message.guildId);
         distube.emit("finish", queue);
     }
-    else if(command == "move" || command == "mv" || command == "swap")
+    else if(command == "move" || command == "mv" || command == "swap" || command == "sw" || command == "sp")
     {
+        console.log("test1")
         let queue = distube.getQueue(message.guildId);
         if(!queue)
         {
@@ -179,24 +180,40 @@ client.on("messageCreate", async (message: Message) => {
             return;
         }
 
-        const pos1 = Number(args[0]);
-        const pos2 = Number(args[1]);
-        if(queue.songs.length < pos1 || queue.songs.length < pos2)
+        const pos1_pre = Number(args[0]);
+        const pos2_pre = Number(args[1]);
+        const pos1 = pos1_pre <= pos2_pre ? pos1_pre : pos2_pre;    // pos1 is always the first position
+        const pos2 = pos1_pre > pos2_pre ? pos1_pre : pos2_pre;     // pos2 is always the last position
+
+        if(pos1 == 1 || pos2 == 1)
         {
-            const pos = pos1 > pos2 ? pos1 : pos2;
-            message.channel.send("Queue does not have a song in place \`" + pos + "\`!")
+            message.channel.send("Cannot move a song in position \`1\`!")
             return;
         }
 
-        // TODO: implement move command to swap songs in queue
-        //const s = queue.songs[pos1];
-        //queue.songs.splice(pos1, 1, queue.songs[pos2]);
-        //queue.songs.splice(pos2, 1, s);
-        //message.channel.send('Swapped positions:\n \`' + queue.songs[pos1].name + '\`\n\`' + queue.songs[pos2].name + '\`')
+        if(queue.songs.length < pos1 || pos1 < 1)
+        {
+            message.channel.send("Queue does not have a song in place \`" + pos1 + "\`!")
+            return;
+        }
 
-        //map((song, id) =>
-        //    `**${id+1}**. \`[${song.name}]\`(<${song.url}>) - \`${song.formattedDuration}\``
-        //    ).join("\n"));
+        if(queue.songs.length < pos2 || pos2 < 1)
+        {
+            message.channel.send("Queue does not have a song in place \`" + pos2 + "\`!")
+            return;
+        }
+
+        message.channel.send('Swapped positions:\n\`' + queue.songs[pos1-1].name + '\`\n\`' + queue.songs[pos2-1].name + '\`')
+        const song1 = queue.songs[pos1-1];
+        const song2 = queue.songs[pos2-1];
+
+        // remove pos1 and put it in pos2
+        queue.songs.splice(pos1-1, 1);
+        queue.addToQueue(song1, pos2-1);
+
+        // remove pos2 and put it in pos1
+        queue.songs.splice(pos2-2, 1);
+        queue.addToQueue(song2, pos1-1);
     }
     else if(command == "remove" || command == "rm" || command == "delete" || command == "del")
     {
@@ -240,6 +257,7 @@ client.on("messageCreate", async (message: Message) => {
         "\`*seek [seconds]\` to jump to the time-argument in the music\n" +
         "\`*clear\` or \`*stop\` to clear the music queue\n" +
         "\`*remove [number]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
+        "\`*move [number] [number]\` to swap the positions of the songs in queue\n" +
         "\`*leave\` or \`disconnect\` to make me leave"
         );
     }
