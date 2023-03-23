@@ -1,9 +1,10 @@
-import { ActivityType, Client, Message } from "discord.js"
+import { ActivityType, Client, GuildMember, Message } from "discord.js"
 import { Player } from "discord-player"
-import { DisTube } from "distube"
+import { DisTube, Song } from "distube"
 import config from "./config";
 
 const prefix = "*";
+let autoplay = false;
 let timer: NodeJS.Timeout
 
 // =============================================================================
@@ -34,17 +35,61 @@ const distube = new DisTube(client, {
 // ================================ LISTENERS ==================================
 // =============================================================================
 distube.on("playSong", (queue, song) => {
-    if(queue.textChannel)
+    if(!queue.textChannel)
     {
-        queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user?.username}`)
+        return
+    }
+
+    if(autoplay && !song.user)
+    {
+        queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${client.user?.username}`)
+        return
+    }
+
+    queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user?.username}`)
+});
+
+distube.on("finishSong", (queue, song) => {
+    if(!queue.textChannel)
+    {
+        return
+    }
+
+    if(!autoplay || queue.songs.length > 1)
+    {
+        return
+    }
+
+    const relatedSongs = song.related
+    for(let relatedSong of relatedSongs)
+    {
+        const songRepeated = !queue.previousSongs.every((song) => {
+            return song.name != relatedSong.name
+        })
+
+        if(songRepeated)
+        {
+            continue
+        }
+
+        if(relatedSong.duration > 8*60 || relatedSong.views < 100000 || relatedSong.dislikes*4 > relatedSong.likes)
+        {
+            continue
+        }
+
+        let song: Song = new Song(relatedSong)
+        queue.addToQueue(song);
+        break;
     }
 });
 
 distube.on("addSong", (queue, song) => {
-    if(queue.textChannel)
+    if(!queue.textChannel)
     {
-        queue.textChannel.send(`Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue by ${song.user?.username}.`)
+        return
     }
+
+    queue.textChannel.send(`Added \`${song.name}\` - \`${song.formattedDuration}\` to the queue by ${song.user?.username}.`)
 });
 
 distube.on("searchNoResult", (message, query) => message.channel.send(`No result found for \`${query}\`!`));
@@ -55,10 +100,12 @@ distube.on('error', (channel, e) => {
 })
 
 distube.on("empty", queue => {
-    if(queue.textChannel)
+    if(!queue.textChannel)
     {
-        queue.textChannel.send("Channel is empty. Leaving the channel.")
+        return
     }
+
+    queue.textChannel.send("Channel is empty. Leaving the channel.")
 })
 
 distube.on("finish", queue => {
@@ -125,6 +172,11 @@ client.on("messageCreate", async (message: Message) => {
         {
             return
         }
+        else if( queue.songs.length < 2 && autoplay)
+        {
+            distube.emit("finishSong", queue, queue.songs[0]);
+            distube.skip(message.guildId);
+        }
         else if( queue.songs.length < 2)
         {
             distube.stop(message.guildId);
@@ -172,7 +224,6 @@ client.on("messageCreate", async (message: Message) => {
     }
     else if(command == "move" || command == "mv" || command == "swap" || command == "sw" || command == "sp")
     {
-        console.log("test1")
         let queue = distube.getQueue(message.guildId);
         if(!queue)
         {
@@ -247,6 +298,19 @@ client.on("messageCreate", async (message: Message) => {
             queue.songs.splice(pos-1, 1)
         }
     }
+    else if(command == "radio" || command == "ra" || command == "auto" || command == "autoplay")
+    {
+        const queue = distube.getQueue(message.guildId);
+        if(queue)
+        {
+            autoplay = !autoplay;
+            message.channel.send("Radio mode is now \`" + (autoplay?"on":"off") + "\`!")
+        }
+        else
+        {
+            message.channel.send("Add a music before toggling radio mode!")
+        }
+    }
     else if(command == "help" || command == "h")
     {
         message.channel.send(
@@ -258,6 +322,7 @@ client.on("messageCreate", async (message: Message) => {
         "\`*clear\` or \`*stop\` to clear the music queue\n" +
         "\`*remove [number]\` to remove a music from the queue, where the argument is the number of the music in the queue list\n" +
         "\`*move [number] [number]\` to swap the positions of the songs in queue\n" +
+        "\`*radio\` to turn on radio mode (keeps playing related songs)\n" +
         "\`*leave\` or \`*disconnect\` to make me leave"
         );
     }
