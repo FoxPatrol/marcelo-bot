@@ -1,8 +1,9 @@
 import { ActivityType, Client, Message } from "discord.js"
-import { DisTube, Song } from "distube"
+import { DisTube, Queue, Song } from "distube"
 import config from "./config";
 
 const prefix = "*";
+let autoplay: Record<string, boolean> = {};
 let timer: NodeJS.Timeout
 
 // =============================================================================
@@ -32,13 +33,18 @@ const distube = new DisTube(client, {
 // =============================================================================
 // ================================ LISTENERS ==================================
 // =============================================================================
+distube.on("initQueue", (queue) => {
+    autoplay[queue.id] = false;
+    console.log("init queue")
+})
+
 distube.on("playSong", (queue, song) => {
     if(!queue.textChannel)
     {
         return
     }
 
-    if(queue.autoplayPersonalized && !song.user)
+    if(isAutoplay(queue) && !song.user)
     {
         queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${client.user?.username}`)
         return
@@ -53,7 +59,7 @@ distube.on("finishSong", (queue, song) => {
         return
     }
 
-    if(!queue.autoplayPersonalized || queue.songs.length > 1)
+    if(!isAutoplay(queue) || queue.songs.length > 1)
     {
         return
     }
@@ -174,7 +180,7 @@ client.on("messageCreate", async (message: Message) => {
         {
             return
         }
-        else if( queue.songs.length < 2 && queue.autoplayPersonalized)
+        else if( queue.songs.length < 2 && isAutoplay(queue))
         {
             distube.emit("finishSong", queue, queue.songs[0]);
             distube.skip(message.guildId);
@@ -305,7 +311,7 @@ client.on("messageCreate", async (message: Message) => {
         const queue = distube.getQueue(message.guildId);
         if(queue)
         {
-            const autoplay = distube.toggleAutoplayPersonalized(message.guildId);
+            const autoplay = toggleAutoplay(queue);
             message.channel.send("Radio mode is now \`" + (autoplay?"on":"off") + "\`!")
         }
         else
@@ -336,3 +342,22 @@ client.on("messageCreate", async (message: Message) => {
 // =================================== END =====================================
 
 client.login(config.TOKEN)
+
+
+// ============================== HELPER FUNCTIONS =============================
+
+function isAutoplay(queue: Queue): boolean {
+    // return status of autoplay for the queue in question
+    return (queue.id in autoplay && autoplay[queue.id])
+}
+
+function toggleAutoplay(queue: Queue): boolean {
+    // toggle status of autoplay between on and off, return status it set
+    if(!(queue.id in autoplay)) {
+        autoplay[queue.id] = true;
+        return autoplay[queue.id];
+    }
+
+    autoplay[queue.id] = !autoplay[queue.id];
+    return autoplay[queue.id];
+}
