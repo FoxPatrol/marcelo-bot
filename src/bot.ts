@@ -1,10 +1,8 @@
-import { ActivityType, Client, GuildMember, Message } from "discord.js"
-import { Player } from "discord-player"
+import { ActivityType, Client, Message } from "discord.js"
 import { DisTube, Song } from "distube"
 import config from "./config";
 
 const prefix = "*";
-let autoplay = false;
 let timer: NodeJS.Timeout
 
 // =============================================================================
@@ -40,7 +38,7 @@ distube.on("playSong", (queue, song) => {
         return
     }
 
-    if(autoplay && !song.user)
+    if(queue.autoplayPersonalized && !song.user)
     {
         queue.textChannel.send(`Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${client.user?.username}`)
         return
@@ -55,7 +53,7 @@ distube.on("finishSong", (queue, song) => {
         return
     }
 
-    if(!autoplay || queue.songs.length > 1)
+    if(!queue.autoplayPersonalized || queue.songs.length > 1)
     {
         return
     }
@@ -176,7 +174,7 @@ client.on("messageCreate", async (message: Message) => {
         {
             return
         }
-        else if( queue.songs.length < 2 && autoplay)
+        else if( queue.songs.length < 2 && queue.autoplayPersonalized)
         {
             distube.emit("finishSong", queue, queue.songs[0]);
             distube.skip(message.guildId);
@@ -307,7 +305,7 @@ client.on("messageCreate", async (message: Message) => {
         const queue = distube.getQueue(message.guildId);
         if(queue)
         {
-            autoplay = !autoplay;
+            const autoplay = distube.toggleAutoplayPersonalized(message.guildId);
             message.channel.send("Radio mode is now \`" + (autoplay?"on":"off") + "\`!")
         }
         else
