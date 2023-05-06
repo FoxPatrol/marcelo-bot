@@ -35,7 +35,6 @@ const distube = new DisTube(client, {
 // =============================================================================
 distube.on("initQueue", (queue) => {
     autoplay[queue.id] = false;
-    console.log("init queue")
 })
 
 distube.on("playSong", (queue, song) => {
