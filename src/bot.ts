@@ -162,7 +162,11 @@ client.on("messageCreate", async (message: Message) => {
             member: message.member,
             // @ts-ignore
             textChannel: message.channel,
-        });
+        })
+        .catch(error => {
+            console.error(error);
+            message.channel.send(error.name);
+        })
         if(timer) { clearTimeout(timer) }
     }
     else if(command == "skip" || command == "s")
