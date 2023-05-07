@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     container: node:16
     environment:
-      name: 'Development'
+      name: 'marcelo-bot'
     steps:
       - name: Check Node.js version
         run: node --version
