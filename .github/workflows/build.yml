@@ -1,8 +1,12 @@
-on: push
+on:
+  push:
+    branches: [ "master" ]
 jobs:
   build-node:
     runs-on: ubuntu-latest
     container: node:16
+    environment:
+      name: 'Development'
     steps:
       - name: Check Node.js version
         run: node --version
