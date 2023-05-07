@@ -23,5 +23,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Display environment variables
+        run: |
+          echo "TOKEN: ${{ env.TOKEN }}"
+          echo "CLIENT_ID: ${{ env.CLIENT_ID }}"
+          echo "GUILD_ID: ${{ env.GUILD_ID }}"
+
       - name: Start
         run: npm run start
