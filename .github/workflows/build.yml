@@ -1,3 +1,5 @@
+name: marcelo-bot
+
 on:
   push:
     branches: [ "master" ]
@@ -5,8 +7,9 @@ jobs:
   build-node:
     runs-on: ubuntu-latest
     container: node:16
-    environment:
+    env:
       name: 'marcelo-bot'
+      TOKEN: ${{ secrets.TOKEN }}
     steps:
       - name: Check Node.js version
         run: node --version
