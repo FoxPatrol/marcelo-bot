@@ -10,6 +10,8 @@ jobs:
     env:
       name: 'marcelo-bot'
       TOKEN: ${{ secrets.TOKEN }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      GUILD_ID: ${{ secrets.GUILD_ID }}
     steps:
       - name: Check Node.js version
         run: node --version
