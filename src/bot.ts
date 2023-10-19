@@ -143,8 +143,25 @@ client.on("messageCreate", async (message: Message) => {
     if(message.author.bot) return;
 
     let timestamp: Date = new Date(message.createdTimestamp);
+
+    // replace @id with user name
+    let messageContent = message.content;
+    message.mentions.users.forEach((user, id) => {
+        const regex = new RegExp(id, 'g');
+        messageContent = messageContent.replace(regex, user.username);
+    })
+
+    let messageAttachments = "";
+
+    message.attachments.forEach((attachment, id) => {
+        if (attachment && attachment.url) {
+            const { url, name } = attachment;
+            messageAttachments += "[" + attachment.name + ` (${attachment.url})` + "]";
+        }
+    })
+
     // @ts-ignore
-    console.log(timestamp.toUTCString() + " || " + message.guild?.name + ":" + message.channel.name + " || " + message.author.username + ": " + message.content);
+    console.log(timestamp.toUTCString() + " || " + message.guild?.name + ":" + message.channel.name + " || " + message.author.username + ": " + messageContent + " " + messageAttachments);
 
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
