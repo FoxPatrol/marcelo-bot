@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  marcelo-bot:
+    container_name: marcelo-bot
+    build: .
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
