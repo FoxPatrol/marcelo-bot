@@ -21,7 +21,7 @@
     "start": "node build/index.js",
     "dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
     "docker:build": "docker build -t marcelo-bot .",
-    "docker:run": "docker run -p 3000:3000 marcelo-bot"
+    "docker:run": "docker run marcelo-bot"
   },
   "keywords": [],
   "author": "",
