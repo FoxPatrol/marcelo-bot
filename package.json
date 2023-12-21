@@ -6,23 +6,22 @@
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
     "@distube/ytdl-core": "^4.13.3",
-    "discord.js": "^14.11.0",
-    "distube": "^4.0.4",
-    "dotenv": "^16.0.3",
-    "libsodium-wrappers": "^0.7.13",
-    "node": "^19.0.0"
+    "discord.js": "^14.14.1",
+    "distube": "^4.1.1",
+    "dotenv": "^16.3.1",
+    "libsodium-wrappers": "^0.7.13"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",
-    "typescript": "^4.8.4"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js",
     "dev": "nodemon --exec ts-node src/index.ts",
     "docker:build": "docker build -t marcelo-bot .",
-    "docker:run": "docker run marcelo-bot"
+    "docker:run": "docker run --restart always marcelo-bot"
   },
   "keywords": [],
   "author": "",
