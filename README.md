@@ -6,7 +6,7 @@ For ease of running, run in docker container by making the image with `npm run d
 
 ## Development
 
-Should have `.env` file with `TOKEN` variable, relating to the discord bot `CLIENT SECRET`.
+Should have `.env` file with `TOKEN` variable, relating to the discord bot's `TOKEN` variable, under `Bot` tab.
 
 ## Deployment
 

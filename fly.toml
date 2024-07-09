@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for marcelo-bot-nameless-sound-511 on 2024-07-09T23:29:23+02:00
+# fly.toml app configuration file generated for marcelo-bot on 2024-07-10T00:16:51+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'marcelo-bot-nameless-sound-511'
+app = 'marcelo-bot'
 primary_region = 'ams'
 
 [build]
